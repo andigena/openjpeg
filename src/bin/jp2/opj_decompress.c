@@ -1315,6 +1315,8 @@ static opj_image_t* upsample_image_components(opj_image_t* original)
 /* -------------------------------------------------------------------------- */
 int main(int argc, char **argv)
 {
+while (__AFL_LOOP(1000)) {
+// loop all the loops
     opj_decompress_parameters parameters;           /* decompression parameters */
     opj_image_t* image = NULL;
     opj_stream_t *l_stream = NULL;              /* Stream */
@@ -1328,6 +1330,7 @@ int main(int argc, char **argv)
     OPJ_FLOAT64 t, tCumulative = 0;
     OPJ_UINT32 numDecompressedImages = 0;
     OPJ_UINT32 cp_reduce;
+
 
     /* set decoding parameters to default values */
     set_default_parameters(&parameters);
@@ -1499,7 +1502,7 @@ int main(int argc, char **argv)
                 goto fin;
             }
         }
-
+#if 0
         if (getenv("USE_OPJ_SET_DECODED_RESOLUTION_FACTOR") != NULL) {
             /* For debugging/testing purposes, and also an illustration on how to */
             /* use the alternative API opj_set_decoded_resolution_factor() instead */
@@ -1514,7 +1517,7 @@ int main(int argc, char **argv)
                 goto fin;
             }
         }
-
+#endif
         if (!parameters.nb_tile_to_decode) {
             if (getenv("SKIP_OPJ_SET_DECODE_AREA") != NULL &&
                     parameters.DA_x0 == 0 &&
@@ -1685,6 +1688,7 @@ int main(int argc, char **argv)
             }
         }
 
+#if 0
         /* create output image */
         /* ------------------- */
         switch (parameters.cod_format) {
@@ -1772,6 +1776,7 @@ int main(int argc, char **argv)
             fprintf(stderr, "[ERROR] Outfile %s not generated\n", parameters.outfile);
             failed = 1;
         }
+#endif
 
         /* free remaining structures */
         if (l_codec) {
@@ -1807,6 +1812,7 @@ fin:
         fprintf(stdout, "decode time: %d ms\n",
                 (int)((tCumulative * 1000.0) / (OPJ_FLOAT64)numDecompressedImages));
     }
-    return failed ? EXIT_FAILURE : EXIT_SUCCESS;
+} // AFL_LOOP
+    return 0;
 }
 /*end main()*/
